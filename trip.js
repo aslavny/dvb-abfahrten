@@ -30,10 +30,23 @@ function pad(n) { return (n < 10 ? '0' : '') + n; }
 function toLocalInput(d) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
 }
-function setNow() {
-  document.getElementById('trip-time').value = toLocalInput(new Date());
+function markChip(key) {
+  document.querySelectorAll('#time-chips .chip').forEach(function(c) {
+    c.classList.toggle('on', c.dataset.chip === key);
+  });
+}
+// Chips rechnen immer ab der aktuellen Uhrzeit; "Morgen" = morgen zur gleichen Uhrzeit
+function setChip(key) {
+  var d = new Date();
+  if (key === '15') d.setMinutes(d.getMinutes() + 15);
+  else if (key === '30') d.setMinutes(d.getMinutes() + 30);
+  else if (key === '60') d.setMinutes(d.getMinutes() + 60);
+  else if (key === 'tomorrow') d.setDate(d.getDate() + 1);
+  document.getElementById('trip-time').value = toLocalInput(d);
+  markChip(key);
   maybeLoadTrips();
 }
+function setNow() { setChip('now'); }
 function setTimeMode(arr) {
   tripArrival = arr;
   document.getElementById('mode-dep').classList.toggle('on', !arr);
@@ -46,7 +59,7 @@ function getTripTime() {
   return isNaN(d) ? new Date() : d;
 }
 document.getElementById('trip-time').value = toLocalInput(new Date());
-document.getElementById('trip-time').addEventListener('change', maybeLoadTrips);
+document.getElementById('trip-time').addEventListener('change', function() { markChip(null); maybeLoadTrips(); });
 
 /* ── Suchfelder ── */
 function setupTripField(inputId, sugId, onPick) {

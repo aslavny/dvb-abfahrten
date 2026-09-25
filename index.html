@@ -70,7 +70,13 @@
         <button class="seg-btn" id="mode-arr" onclick="setTimeMode(true)">An</button>
       </div>
       <input type="datetime-local" id="trip-time" class="time-inp"/>
-      <button class="now-btn" onclick="setNow()">Jetzt</button>
+    </div>
+    <div class="chips" id="time-chips">
+      <button class="chip on" data-chip="now" onclick="setChip('now')">Jetzt</button>
+      <button class="chip" data-chip="15" onclick="setChip('15')">+15 min</button>
+      <button class="chip" data-chip="30" onclick="setChip('30')">+30 min</button>
+      <button class="chip" data-chip="60" onclick="setChip('60')">+1 h</button>
+      <button class="chip" data-chip="tomorrow" onclick="setChip('tomorrow')">Morgen</button>
     </div>
     <div id="trip-list" class="dep-list">
       <div class="status"><div class="icon">🧭</div>Start und Ziel eingeben</div>
