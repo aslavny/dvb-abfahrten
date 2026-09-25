@@ -267,3 +267,38 @@ body {
   .ferry { background: rgba(12,74,110,.2);  color: #7dd3fc; }
   .search-clear { background: #52525b; }
 }
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 4px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 3px; margin-bottom: 1rem; }
+.tab { flex: 1; padding: 8px 10px; font-size: 13.5px; font-family: inherit; font-weight: 600; border: none; border-radius: 8px; background: transparent; color: var(--text3); cursor: pointer; }
+.tab.on { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+/* ── Trip fields ── */
+.trip-fields { display: flex; gap: 8px; align-items: center; margin-bottom: 1rem; }
+.trip-inputs { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.trip-field { margin-bottom: 0; }
+.trip-field input[type="text"] { padding-left: 58px; }
+.field-label { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 600; color: var(--text3); pointer-events: none; }
+.trip-inputs .suggestions { margin-bottom: 0; }
+.swap-btn { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--bg); color: var(--text2); font-size: 17px; cursor: pointer; font-family: inherit; }
+.swap-btn:hover { background: var(--surface); }
+
+/* ── Trip cards ── */
+.trip-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; }
+.trip-card:hover { border-color: var(--border2); }
+.trip-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.trip-times { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+.trip-until { font-size: 13px; font-weight: 600; color: var(--blue); flex-shrink: 0; }
+.trip-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.trip-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 8px; }
+.trip-chain .badge { min-width: 0; padding: 0 8px; height: 24px; font-size: 12px; }
+.chain-arrow { color: var(--text3); font-size: 14px; }
+.trip-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); flex-direction: column; gap: 10px; }
+.trip-card.open .trip-details { display: flex; }
+.leg-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.leg-head .badge { min-width: 0; padding: 0 8px; height: 24px; font-size: 12px; }
+.leg-dir { font-size: 12.5px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.leg-stop { font-size: 13px; display: flex; gap: 8px; align-items: baseline; padding-left: 2px; }
+.leg-time { font-weight: 700; min-width: 40px; }
+.leg-meta { color: var(--text3); font-size: 12px; }
+.leg-walk { font-size: 12.5px; color: var(--text3); }

@@ -17,6 +17,12 @@
     <span class="app-title">DVB Abfahrtsmonitor</span>
   </div>
 
+  <div class="tabs">
+    <button class="tab on" data-view="deps" onclick="switchView('deps')">Abfahrten</button>
+    <button class="tab" data-view="trip" onclick="switchView('trip')">Verbindung</button>
+  </div>
+
+  <div id="view-deps">
   <div class="search-wrap">
     <span class="search-icon">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -38,6 +44,28 @@
 
   <div id="list" class="dep-list">
     <div class="status"><div class="icon">🚉</div>Haltestelle eingeben</div>
+  </div>
+  </div>
+
+  <div id="view-trip" style="display:none">
+    <div class="trip-fields">
+      <div class="trip-inputs">
+        <div class="search-wrap trip-field">
+          <span class="field-label">Von</span>
+          <input type="text" id="from-inp" placeholder="Start…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+        <div id="from-sug"></div>
+        <div class="search-wrap trip-field">
+          <span class="field-label">Nach</span>
+          <input type="text" id="to-inp" placeholder="Ziel…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+        <div id="to-sug"></div>
+      </div>
+      <button class="swap-btn" onclick="swapTrip()" aria-label="Start und Ziel tauschen">⇅</button>
+    </div>
+    <div id="trip-list" class="dep-list">
+      <div class="status"><div class="icon">🧭</div>Start und Ziel eingeben</div>
+    </div>
   </div>
 
 </div>
@@ -235,5 +263,6 @@ function esc(s) {
 
 inp.focus();
 </script>
+<script src="/trip.js"></script>
 </body>
 </html>
