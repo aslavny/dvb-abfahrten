@@ -302,3 +302,29 @@ body {
 .leg-time { font-weight: 700; min-width: 40px; }
 .leg-meta { color: var(--text3); font-size: 12px; }
 .leg-walk { font-size: 12.5px; color: var(--text3); }
+
+/* ── Zeitwahl ── */
+.time-row { display: flex; gap: 6px; align-items: center; margin-bottom: 1rem; }
+.seg { display: flex; background: var(--surface); border: 1.5px solid var(--border); border-radius: 9px; padding: 2px; flex-shrink: 0; }
+.seg-btn { padding: 6px 10px; font-size: 13px; font-weight: 600; font-family: inherit; border: none; border-radius: 7px; background: transparent; color: var(--text3); cursor: pointer; }
+.seg-btn.on { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.time-inp { flex: 1; min-width: 0; padding: 8px 10px; font-size: 14px; font-family: inherit; font-weight: 500; border: 1.5px solid var(--border); border-radius: 9px; background: var(--surface); color: var(--text); -webkit-appearance: none; }
+.time-inp:focus { outline: none; border-color: var(--blue); }
+.now-btn { flex-shrink: 0; padding: 8px 12px; font-size: 13px; font-weight: 600; font-family: inherit; border: 1.5px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--text2); cursor: pointer; }
+
+/* ── Aufklappbares ── */
+.trip-card { cursor: default; }
+.trip-summary { cursor: pointer; }
+.mid-toggle { display: inline-flex; align-items: center; gap: 4px; margin: 2px 0 2px 50px; padding: 2px 0; font-size: 12px; font-family: inherit; font-weight: 500; color: var(--text3); background: none; border: none; cursor: pointer; }
+.mid-arrow { display: inline-block; transition: transform .15s; }
+.leg.mids-open .mid-arrow { transform: rotate(90deg); }
+.mids { display: none; border-left: 2px solid var(--border); margin: 2px 0 4px 18px; padding-left: 10px; }
+.leg.mids-open .mids { display: block; }
+.leg-stop.mid { font-size: 12.5px; color: var(--text2); padding: 2px 0; }
+.leg-stop.mid .leg-time { font-weight: 500; }
+
+/* ── Karte ── */
+.map-toggle { align-self: flex-start; padding: 7px 12px; font-size: 13px; font-weight: 600; font-family: inherit; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text2); cursor: pointer; }
+.trip-map { display: none; height: 260px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); position: relative; }
+.trip-card.map-open .trip-map { display: block; }
+.map-note { position: absolute; bottom: 8px; left: 8px; z-index: 500; background: var(--bg); padding: 4px 8px; border-radius: 6px; font-size: 12px; color: var(--text3); }

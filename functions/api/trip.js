@@ -11,7 +11,7 @@ export async function onRequestPost(context) {
       origin: body.origin,
       destination: body.destination,
       time: body.time || new Date().toISOString(),
-      isarrivaltime: false,
+      isarrivaltime: !!body.isarrivaltime,
       shorttermchanges: true,
       standardSettings: {
         mot: ['Tram', 'CityBus', 'IntercityBus', 'SuburbanRailway', 'Train', 'Cableway', 'Ferry', 'HailedSharedTaxi'],

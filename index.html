@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -62,6 +63,14 @@
         <div id="to-sug"></div>
       </div>
       <button class="swap-btn" onclick="swapTrip()" aria-label="Start und Ziel tauschen">⇅</button>
+    </div>
+    <div class="time-row">
+      <div class="seg">
+        <button class="seg-btn on" id="mode-dep" onclick="setTimeMode(false)">Ab</button>
+        <button class="seg-btn" id="mode-arr" onclick="setTimeMode(true)">An</button>
+      </div>
+      <input type="datetime-local" id="trip-time" class="time-inp"/>
+      <button class="now-btn" onclick="setNow()">Jetzt</button>
     </div>
     <div id="trip-list" class="dep-list">
       <div class="status"><div class="icon">🧭</div>Start und Ziel eingeben</div>
@@ -263,6 +272,8 @@ function esc(s) {
 
 inp.focus();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js"></script>
 <script src="/trip.js"></script>
 </body>
 </html>
