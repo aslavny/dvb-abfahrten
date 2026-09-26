@@ -1,5 +1,6 @@
 // Verbindungsauskunft — nutzt Hilfsfunktionen aus index.html (api, parsePoint, msDate, fmt, mclass, micon, esc)
 var tripFrom = null, tripTo = null, tripArrival = false, tripRoutes = [], tripMaps = {};
+var tripSearchId = 0; // erhöht sich bei jeder neuen Suche, damit veraltete "Später"-Antworten ignoriert werden
 
 // Gauß-Krüger Zone 4 (VVO liefert Koordinaten so) → WGS84
 if (window.proj4) {
@@ -115,6 +116,7 @@ function setTripStatus(h) {
 /* ── Laden ── */
 function maybeLoadTrips() {
   if (!tripFrom || !tripTo) return;
+  tripSearchId++;
   setTripStatus('<div class="icon">🧭</div>Suche Verbindungen…');
   api('trip', {
     origin: tripFrom.id,
@@ -134,6 +136,43 @@ function maybeLoadTrips() {
   });
 }
 
+/* ── Später: ab der letzten angezeigten Abfahrt weitersuchen und unten anhängen ── */
+function loadLaterTrips() {
+  var btn = document.getElementById('trip-more');
+  var last = null; // späteste Abfahrt (VVO liefert nicht streng sortiert)
+  tripRoutes.forEach(function(r) {
+    var d = routeTimes(r).dep;
+    if (d && (!last || d > last)) last = d;
+  });
+  if (!btn || !last) return;
+
+  var searchId = tripSearchId;
+  btn.disabled = true;
+  btn.textContent = 'Lade…';
+  api('trip', {
+    origin: tripFrom.id,
+    destination: tripTo.id,
+    time: new Date(last.getTime() + 60000).toISOString(),
+    isarrivaltime: false
+  }).then(function(data) {
+    if (searchId !== tripSearchId) return;
+    var seen = {};
+    tripRoutes.forEach(function(r) { seen[routeKey(r)] = true; });
+    var fresh = (data.Routes || []).filter(function(r) { return !seen[routeKey(r)]; });
+    fresh.forEach(function(r) {
+      tripRoutes.push(r);
+      btn.insertAdjacentHTML('beforebegin', renderCard(r, tripRoutes.length - 1));
+    });
+    btn.disabled = false;
+    btn.textContent = fresh.length ? 'Später' : 'Keine weiteren Verbindungen';
+    if (!fresh.length) btn.disabled = true;
+  }).catch(function() {
+    if (searchId !== tripSearchId) return;
+    btn.disabled = false;
+    btn.textContent = 'Später (Fehler, nochmal versuchen)';
+  });
+}
+
 /* ── Helfer ── */
 function isFootpath(pr) {
   var t = pr.Mot && pr.Mot.Type ? pr.Mot.Type.toLowerCase() : '';
@@ -148,17 +187,33 @@ function delayOf(s, kind) {
 }
 function delayTag(min) { return min > 0 ? ' <span class="tlate">+' + min + '</span>' : ''; }
 function stop(e) { e.stopPropagation(); }
+function routeTimes(route) {
+  var rides = (route.PartialRoutes || []).filter(function(p) { return !isFootpath(p); });
+  var firstStops = rides.length ? rides[0].RegularStops : null;
+  var lastStops = rides.length ? rides[rides.length - 1].RegularStops : null;
+  return {
+    rides: rides,
+    dep: firstStops ? depOf(firstStops[0]) : null,
+    arr: lastStops ? arrOf(lastStops[lastStops.length - 1]) : null
+  };
+}
+// Erkennt Verbindungen, die bei "Später" nochmal mitgeliefert werden
+function routeKey(route) {
+  var t = routeTimes(route);
+  return (t.dep ? t.dep.getTime() : '') + '|' + (t.arr ? t.arr.getTime() : '') + '|'
+    + t.rides.map(function(p) { return p.Mot ? p.Mot.Name : ''; }).join(',');
+}
 
 /* ── Rendern ── */
 function renderTrips() {
-  document.getElementById('trip-list').innerHTML = tripRoutes.map(function(route, idx) {
-    var parts = route.PartialRoutes || [];
-    var rides = parts.filter(function(p) { return !isFootpath(p); });
+  document.getElementById('trip-list').innerHTML = tripRoutes.map(renderCard).join('')
+    + '<button class="map-toggle trip-more" id="trip-more" onclick="loadLaterTrips()">Später</button>';
+}
 
-    var firstStops = rides.length ? rides[0].RegularStops : null;
-    var lastStops = rides.length ? rides[rides.length - 1].RegularStops : null;
-    var dep = firstStops ? depOf(firstStops[0]) : null;
-    var arr = lastStops ? arrOf(lastStops[lastStops.length - 1]) : null;
+function renderCard(route, idx) {
+    var parts = route.PartialRoutes || [];
+    var t = routeTimes(route);
+    var rides = t.rides, dep = t.dep, arr = t.arr;
 
     var minsUntil = dep ? Math.round((dep - new Date()) / 60000) : null;
     var untilTxt = '';
@@ -220,7 +275,6 @@ function renderTrips() {
       + '<div class="trip-map" id="map-' + idx + '"></div>'
       + '</div>'
       + '</div>';
-  }).join('');
 }
 
 function toggleTrip(idx) {
